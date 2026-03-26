@@ -142,7 +142,7 @@
     </div>
 </div>
 
-<script>
+<script type="module">
 let balance = localStorage.getItem("balance") || 0;
 document.getElementById("balance").innerText = balance;
 
@@ -219,6 +219,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-</script>
+<script type="module">
 </body>
 </html>
