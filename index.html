@@ -3,80 +3,17 @@
 <head>
     <title>CHẠY ĐƠN SHOPEE</title>
     <style>
-        body {
-            font-family: Arial;
-            margin: 0;
-            background: #f5f5f5;
-        }
-
-        header {
-            background: orange;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .top-btn {
-            position: absolute;
-            right: 20px;
-            top: 15px;
-        }
-
-        .balance {
-            margin-top: 5px;
-        }
-
-        button {
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .product {
-            background: white;
-            width: 220px;
-            margin: 15px;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        /* popup */
-        .popup {
-            display: none;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            top: 0;
-            left: 0;
-        }
-
-        .popup-content {
-            background: white;
-            width: 300px;
-            margin: 100px auto;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        input {
-            width: 90%;
-            padding: 8px;
-            margin: 5px;
-        }
-
-        img {
-            width: 200px;
-        }
+        body { font-family: Arial; margin: 0; background: #f5f5f5; }
+        header { background: orange; color: white; padding: 15px; text-align: center; }
+        .top-btn { position: absolute; right: 20px; top: 15px; }
+        .balance { margin-top: 5px; }
+        button { padding: 8px; border: none; border-radius: 5px; cursor: pointer; }
+        .container { display: flex; justify-content: center; flex-wrap: wrap; }
+        .product { background: white; width: 220px; margin: 15px; padding: 15px; border-radius: 10px; text-align: center; }
+        .popup { display: none; position: fixed; width: 100%; height: 100%; background: rgba(0,0,0,0.6); top: 0; left: 0; }
+        .popup-content { background: white; width: 300px; margin: 100px auto; padding: 20px; border-radius: 10px; text-align: center; }
+        input { width: 90%; padding: 8px; margin: 5px; }
+        img { width: 200px; }
     </style>
 </head>
 
@@ -85,7 +22,6 @@
 <header>
     💰CHẠY ĐƠN SHOPEE
     <div class="balance">Số dư: <span id="balance">0</span> VNĐ</div>
-
     <div class="top-btn">
         <button onclick="showLogin()">Đăng nhập</button>
     </div>
@@ -125,7 +61,7 @@
 <div class="popup" id="login">
     <div class="popup-content">
         <h3>Đăng nhập</h3>
-        <input id="user" placeholder="Tài khoản">
+        <input id="user" placeholder="Email">
         <input id="pass" type="password" placeholder="Mật khẩu">
         <button onclick="login()">Đăng nhập</button>
         <p onclick="showRegister()" style="color:blue;cursor:pointer">Chưa có tài khoản?</p>
@@ -136,13 +72,14 @@
 <div class="popup" id="register">
     <div class="popup-content">
         <h3>Đăng ký</h3>
-        <input id="newuser" placeholder="Tài khoản">
+        <input id="newuser" placeholder="Email">
         <input id="newpass" type="password" placeholder="Mật khẩu">
         <button onclick="register()">Đăng ký</button>
     </div>
 </div>
 
-<script type="module">
+<!-- JS THƯỜNG (để onclick chạy) -->
+<script>
 let balance = localStorage.getItem("balance") || 0;
 document.getElementById("balance").innerText = balance;
 
@@ -150,21 +87,13 @@ function buy(product, money){
     document.getElementById("qr").style.display="block";
     document.getElementById("nd").innerText="Nội dung: " + product;
 
-    // cộng tiền luôn (giả lập)
     balance = parseInt(balance) + money;
     localStorage.setItem("balance", balance);
     document.getElementById("balance").innerText = balance;
 }
 
-function closeQR(){
-    document.getElementById("qr").style.display="none";
-}
-
-// login/register
-function showLogin(){
-    document.getElementById("login").style.display="block";
-}
-
+function closeQR(){ document.getElementById("qr").style.display="none"; }
+function showLogin(){ document.getElementById("login").style.display="block"; }
 function showRegister(){
     document.getElementById("login").style.display="none";
     document.getElementById("register").style.display="block";
@@ -174,16 +103,11 @@ function register(){
     let u = document.getElementById("newuser").value;
     let p = document.getElementById("newpass").value;
 
-    if(u === "" || p === ""){
-        alert("Nhập đầy đủ!");
-        return;
-    }
-
     localStorage.setItem("user", u);
     localStorage.setItem("pass", p);
     localStorage.setItem("balance", 0);
 
-    alert("Đăng ký thành công");
+    alert("Đăng ký OK");
     document.getElementById("register").style.display="none";
 }
 
@@ -192,33 +116,31 @@ function login(){
     let p = document.getElementById("pass").value;
 
     if(u == localStorage.getItem("user") && p == localStorage.getItem("pass")){
-        alert("Đăng nhập thành công 😎");
+        alert("Login OK 😎");
         document.getElementById("login").style.display="none";
     }else{
-        alert("Sai tài khoản!");
+        alert("Sai!");
     }
 }
-    // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+</script>
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+<!-- FIREBASE (MODULE RIÊNG) -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAIvAtdaP4eRCeRLt-uWWAi5Naw8yhxIOs",
   authDomain: "chaydon-3d23e.firebaseapp.com",
   projectId: "chaydon-3d23e",
   storageBucket: "chaydon-3d23e.firebasestorage.app",
   messagingSenderId: "343898354571",
-  appId: "1:343898354571:web:65f67284ceae3c57d3358e",
-  measurementId: "G-ZFV7B51EM1"
+  appId: "1:343898354571:web:65f67284ceae3c57d3358e"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-<script type="module">
+
+console.log("🔥 Firebase OK");
+</script>
+
 </body>
 </html>
