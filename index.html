@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CHẠY ĐƠN ONLINE</title>
+    <title>CHẠY ĐƠN SHOPEE</title>
     <style>
         body {
             font-family: Arial;
@@ -20,6 +20,10 @@
             position: absolute;
             right: 20px;
             top: 15px;
+        }
+
+        .balance {
+            margin-top: 5px;
         }
 
         button {
@@ -69,13 +73,19 @@
             padding: 8px;
             margin: 5px;
         }
+
+        img {
+            width: 200px;
+        }
     </style>
 </head>
 
 <body>
 
 <header>
-    💰CHẠY ĐƠN ONLINE
+    💰CHẠY ĐƠN SHOPEE
+    <div class="balance">Số dư: <span id="balance">0</span> VNĐ</div>
+
     <div class="top-btn">
         <button onclick="showLogin()">Đăng nhập</button>
     </div>
@@ -85,26 +95,26 @@
     <div class="product">
         <h3>Đơn 100K</h3>
         <p>Hoa hồng: 600K</p>
-        <button onclick="showQR('Đơn 100K')">Mua</button>
+        <button onclick="buy('Đơn 100K',600000)">Mua</button>
     </div>
 
     <div class="product">
         <h3>Đơn 200K</h3>
         <p>Hoa hồng: 1.000K</p>
-        <button onclick="showQR('Đơn 200K')">Mua</button>
+        <button onclick="buy('Đơn 200K',1000000)">Mua</button>
     </div>
 
     <div class="product">
         <h3>Đơn 500K</h3>
         <p>Hoa hồng: 2.000K</p>
-        <button onclick="showQR('Đơn 500K')">Mua</button>
+        <button onclick="buy('Đơn 500K',2000000)">Mua</button>
     </div>
 </div>
 
 <!-- QR -->
 <div class="popup" id="qr">
     <div class="popup-content">
-        <h3>Quét mã</h3>
+        <h3>Quét mã thanh toán</h3>
         <img src="https://via.placeholder.com/200">
         <p id="nd"></p>
         <button onclick="closeQR()">Đóng</button>
@@ -133,10 +143,19 @@
 </div>
 
 <script>
-function showQR(p){
+let balance = localStorage.getItem("balance") || 0;
+document.getElementById("balance").innerText = balance;
+
+function buy(product, money){
     document.getElementById("qr").style.display="block";
-    document.getElementById("nd").innerText="Nội dung: "+p;
+    document.getElementById("nd").innerText="Nội dung: " + product;
+
+    // cộng tiền luôn (giả lập)
+    balance = parseInt(balance) + money;
+    localStorage.setItem("balance", balance);
+    document.getElementById("balance").innerText = balance;
 }
+
 function closeQR(){
     document.getElementById("qr").style.display="none";
 }
@@ -145,22 +164,34 @@ function closeQR(){
 function showLogin(){
     document.getElementById("login").style.display="block";
 }
+
 function showRegister(){
     document.getElementById("login").style.display="none";
     document.getElementById("register").style.display="block";
 }
 
 function register(){
-    localStorage.setItem("user",document.getElementById("newuser").value);
-    localStorage.setItem("pass",document.getElementById("newpass").value);
+    let u = document.getElementById("newuser").value;
+    let p = document.getElementById("newpass").value;
+
+    if(u === "" || p === ""){
+        alert("Nhập đầy đủ!");
+        return;
+    }
+
+    localStorage.setItem("user", u);
+    localStorage.setItem("pass", p);
+    localStorage.setItem("balance", 0);
+
     alert("Đăng ký thành công");
     document.getElementById("register").style.display="none";
 }
 
 function login(){
-    let u=document.getElementById("user").value;
-    let p=document.getElementById("pass").value;
-    if(u==localStorage.getItem("user") && p==localStorage.getItem("pass")){
+    let u = document.getElementById("user").value;
+    let p = document.getElementById("pass").value;
+
+    if(u == localStorage.getItem("user") && p == localStorage.getItem("pass")){
         alert("Đăng nhập thành công 😎");
         document.getElementById("login").style.display="none";
     }else{
