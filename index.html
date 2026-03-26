@@ -198,7 +198,27 @@ function login(){
         alert("Sai tài khoản!");
     }
 }
-</script>
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAIvAtdaP4eRCeRLt-uWWAi5Naw8yhxIOs",
+  authDomain: "chaydon-3d23e.firebaseapp.com",
+  projectId: "chaydon-3d23e",
+  storageBucket: "chaydon-3d23e.firebasestorage.app",
+  messagingSenderId: "343898354571",
+  appId: "1:343898354571:web:65f67284ceae3c57d3358e",
+  measurementId: "G-ZFV7B51EM1"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+</script>
 </body>
 </html>
